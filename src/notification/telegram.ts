@@ -8,11 +8,11 @@ const client = new TelegramClient({
 	accessToken: telegram.accessToken
 });
 
-export function sendTelegramMessage(text: string) {
+export function sendTelegramMessage(cartUrl: string) {
 	(async () => {
 		try {
-			await client.sendMessage(telegram.chatId, text);
-			Logger.info(`↗ telegram message sent to '${telegram.chatId}': ${text}`);
+			await client.sendMessage(telegram.chatId, cartUrl);
+			Logger.info(`↗ telegram message sent to '${telegram.chatId}': ${cartUrl}`);
 		} catch (error) {
 			Logger.error(error);
 		}

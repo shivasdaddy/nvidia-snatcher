@@ -7,7 +7,7 @@ const pushBulletApiKey = Config.notifications.pushBulletApiKey;
 
 export function sendPushBulletNotification(cartUrl: string, link: Link) {
 	const pusher = new PushBullet(pushBulletApiKey);
-	const title = `🚨 ${link.brand} ${link.model} ${link.series} 👀`;
+	const title = `🚨 [${link.brand} (${link.series})] ${link.model} - IN STOCK`;
 
 	pusher.note({}, title, cartUrl, (err: Error, result: string) => {
 		if (err) {

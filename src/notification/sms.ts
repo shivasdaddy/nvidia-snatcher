@@ -4,7 +4,6 @@ import {Logger} from '../logger';
 import Mail from 'nodemailer/lib/mailer';
 import nodemailer from 'nodemailer';
 
-const subject = 'NVIDIA - BUY NOW';
 const [email, phone] = [Config.notifications.email, Config.notifications.phone];
 
 const transporter = nodemailer.createTransport({
@@ -15,30 +14,25 @@ const transporter = nodemailer.createTransport({
 	service: 'gmail'
 });
 
-const mailOptions: Mail.Options = {
-	from: Config.notifications.email.username,
-	subject,
-	to: generateAddress()
-};
-
-export function sendSMS(text: string, link: Link) {
-	mailOptions.text = text;
-
-	if (link.screenshot) {
-		mailOptions.attachments = [
+export function sendSMS(cartUrl: string, link: Link) {
+	const mailOptions: Mail.Options = {
+		attachments: link.screenshot ? [
 			{
 				filename: link.screenshot,
 				path: `./${link.screenshot}`
 			}
-		];
-	}
+		] : undefined,
+		from: email.username,
+		subject: `🚨 [${link.brand} (${link.series})] ${link.model} - IN STOCK`,
+		text: cartUrl,
+		to: generateAddress()
+	};
 
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			Logger.error(error);
 		} else {
-			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			Logger.info(`↗ sms sent: ${info.response}`);
+			Logger.info(`↗ email sent: ${info.response as string}`);
 		}
 	});
 }

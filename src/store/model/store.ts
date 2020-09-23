@@ -21,9 +21,9 @@ export interface Labels {
 }
 
 export interface Store {
+	waitUntil?: LoadEvent;
 	links: Link[];
 	labels: Labels;
 	name: string;
 	setupAction?: (browser: Browser) => void;
-	customWaitFor?: LoadEvent;
 }

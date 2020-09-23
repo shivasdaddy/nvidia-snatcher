@@ -13,7 +13,7 @@ const client = new Twitter({
 });
 
 export function sendTweet(cartUrl: string, link: Link) {
-	let status = `🛎️ Stock Notification: ${link.brand} ${link.model}\n${cartUrl}`;
+	let status = `🚨 [${link.brand} (${link.series})] ${link.model} - IN STOCK\n${cartUrl}`;
 
 	if (twitter.tweetTags) {
 		status += `\n\n${twitter.tweetTags}`;

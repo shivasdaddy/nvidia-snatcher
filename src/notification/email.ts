@@ -5,7 +5,6 @@ import Mail from 'nodemailer/lib/mailer';
 import nodemailer from 'nodemailer';
 
 const email = Config.notifications.email;
-const subject = 'NVIDIA - BUY NOW';
 
 const transporter = nodemailer.createTransport({
 	auth: {
@@ -15,30 +14,25 @@ const transporter = nodemailer.createTransport({
 	service: 'gmail'
 });
 
-const mailOptions: Mail.Options = {
-	from: email.username,
-	subject,
-	to: email.username
-};
-
 export function sendEmail(cartUrl: string, link: Link) {
-	mailOptions.text = cartUrl;
-
-	if (link.screenshot) {
-		mailOptions.attachments = [
+	const mailOptions: Mail.Options = {
+		attachments: link.screenshot ? [
 			{
 				filename: link.screenshot,
 				path: `./${link.screenshot}`
 			}
-		];
-	}
+		] : undefined,
+		from: email.username,
+		subject: `🚨 [${link.brand} (${link.series})] ${link.model} - IN STOCK`,
+		text: cartUrl,
+		to: email.username
+	};
 
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			Logger.error(error);
 		} else {
-			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			Logger.info(`↗ email sent: ${info.response}`);
+			Logger.info(`↗ email sent: ${info.response as string}`);
 		}
 	});
 }
